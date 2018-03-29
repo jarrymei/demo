@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhidisoft.dao.FunctionMapper">
+  <resultMap id="BaseResultMap" type="com.zhidisoft.entity.Function">
+    <id column="func_id" jdbcType="INTEGER" property="funcId" />
+    <result column="func_name" jdbcType="VARCHAR" property="funcName" />
+    <result column="func_code" jdbcType="VARCHAR" property="funcCode" />
+    <result column="func_type" jdbcType="INTEGER" property="funcType" />
+    <result column="func_url" jdbcType="VARCHAR" property="funcUrl" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="update_time" jdbcType="DATE" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    func_id, func_name, func_code, func_type, func_url, parent_id, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_functions
+    where func_id = #{funcId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_functions
+    where func_id = #{funcId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhidisoft.entity.Function">
+    insert into tb_functions (func_id, func_name, func_code, 
+      func_type, func_url, parent_id, 
+      create_time, update_time)
+    values (#{funcId,jdbcType=INTEGER}, #{funcName,jdbcType=VARCHAR}, #{funcCode,jdbcType=VARCHAR}, 
+      #{funcType,jdbcType=INTEGER}, #{funcUrl,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=DATE}, #{updateTime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhidisoft.entity.Function">
+    insert into tb_functions
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="funcId != null">
+        func_id,
+      </if>
+      <if test="funcName != null">
+        func_name,
+      </if>
+      <if test="funcCode != null">
+        func_code,
+      </if>
+      <if test="funcType != null">
+        func_type,
+      </if>
+      <if test="funcUrl != null">
+        func_url,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="funcId != null">
+        #{funcId,jdbcType=INTEGER},
+      </if>
+      <if test="funcName != null">
+        #{funcName,jdbcType=VARCHAR},
+      </if>
+      <if test="funcCode != null">
+        #{funcCode,jdbcType=VARCHAR},
+      </if>
+      <if test="funcType != null">
+        #{funcType,jdbcType=INTEGER},
+      </if>
+      <if test="funcUrl != null">
+        #{funcUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhidisoft.entity.Function">
+    update tb_functions
+    <set>
+      <if test="funcName != null">
+        func_name = #{funcName,jdbcType=VARCHAR},
+      </if>
+      <if test="funcCode != null">
+        func_code = #{funcCode,jdbcType=VARCHAR},
+      </if>
+      <if test="funcType != null">
+        func_type = #{funcType,jdbcType=INTEGER},
+      </if>
+      <if test="funcUrl != null">
+        func_url = #{funcUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=DATE},
+      </if>
+    </set>
+    where func_id = #{funcId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhidisoft.entity.Function">
+    update tb_functions
+    set func_name = #{funcName,jdbcType=VARCHAR},
+      func_code = #{funcCode,jdbcType=VARCHAR},
+      func_type = #{funcType,jdbcType=INTEGER},
+      func_url = #{funcUrl,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
+      update_time = #{updateTime,jdbcType=DATE}
+    where func_id = #{funcId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findParentFuncByUserId" resultMap="BaseResultMap">
+  	SELECT DISTINCT tf.* FROM tb_functions tf
+	LEFT JOIN tb_role_function trf
+		ON tf.func_id=trf.func_id
+	LEFT JOIN tb_roles tr
+		ON tr.role_id=trf.role_id
+	LEFT JOIN tb_user_role tur
+		ON tur.role_id=tr.role_id
+	WHERE tur.user_id=#{userId}  AND parent_id IS NULL AND func_type=1
+  </select>
+  
+  <select id="findChildFuncByUserIdAndParentId" resultMap="BaseResultMap">
+  	SELECT DISTINCT tf.* FROM tb_functions tf
+	LEFT JOIN tb_role_function trf
+		ON tf.func_id=trf.func_id
+	LEFT JOIN tb_roles tr
+		ON tr.role_id=trf.role_id
+	LEFT JOIN tb_user_role tur
+		ON tur.role_id=tr.role_id
+	WHERE func_type=1 AND parent_id = #{parentId} AND tur.user_id=#{userId}  
+  </select>
+</mapper>
