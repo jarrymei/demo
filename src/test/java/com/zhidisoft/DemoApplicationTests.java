@@ -1,6 +1,5 @@
 package com.zhidisoft;
 
-import com.zhidisoft.dao.IAccountDao;
 import com.zhidisoft.dao.UserMapper;
 import com.zhidisoft.entity.Account;
 import com.zhidisoft.entity.User;
@@ -22,8 +21,8 @@ public class DemoApplicationTests {
 
 	@Autowired
 	private UserMapper userDao;
-	@Autowired
-	private IAccountDao accountDao;
+	/*@Autowired
+	private IAccountDao accountDao;*/
 
 	@Test
 	public void contextLoads() {
@@ -37,9 +36,9 @@ public class DemoApplicationTests {
 	@Rollback(value = false)
 	@Test
 	public void testAccount() {
-		Account account = accountDao.findById(1);
+		/*Account account = accountDao.findById(1);
 		account.setName("silence2");
-		accountDao.update(account);
+		accountDao.update(account);*/
 	}
 
 }

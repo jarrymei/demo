@@ -103,6 +103,10 @@
       login_ip = #{loginIp,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from tb_users
+  </select>
   
   <select id="findUserByPage" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from tb_users limit #{startRows},#{fetchSize}
@@ -110,5 +114,9 @@
   
   <select id="count" resultType="integer">
   	select count(1) from tb_users
+  </select>
+
+  <select id="findByPage" parameterType="org.apache.ibatis.session.RowBounds" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from tb_users
   </select>
 </mapper>

@@ -42,7 +42,7 @@ public class BaseServiceImpl<T, K extends Serializable> implements IBaseService<
 
 	@Override
 	public List<T> getAll() {
-		return null;
+		return baseDao.getAll();
 	}
 
 	/*@Override

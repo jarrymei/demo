@@ -9,9 +9,7 @@
     </settings>
     
     <plugins>
-        <plugin interceptor="com.zhidisoft.mybatis.interceptor.DemoInterceptor">
-            <property name="param1" value="aaa"/>
-            <property name="param2" value="nbbb"/>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
         </plugin>
     </plugins>
 </configuration>
